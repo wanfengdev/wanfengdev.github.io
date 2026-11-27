@@ -1,29 +1,29 @@
 ---
 layout: ../layouts/AboutLayout.astro
-title: "About"
-description: "Get to know Andrés, the web developer, student, and gamer behind Astro Devosfera."
+title: "关于"
+description: "认识晚风博客背后的 at——Web 开发者、学生与游戏玩家。"
 ---
 
-Welcome to my digital corner. I am a **developer** and **student** passionate about technology, video games, and building things that live on the internet.
+欢迎来到我的数字角落。我是一名**开发者**，也是一名**学生**，热爱技术、电子游戏，以及创造那些生活在互联网上的东西。
 
-## Who am I?
+## 我是谁？
 
-My name is Andrés, and since I can remember, I have always been curious about understanding how things work — from taking apart toys as a child to taking apart other people's code at 2 AM. I am currently studying engineering while developing projects that challenge me to learn something new every day.
+我叫 at。从记事起，我就对「事物是如何运转的」充满好奇——小时候拆玩具，长大后凌晨两点拆别人的代码。目前我在攻读工程学，同时做着一些每天都能逼我学点新东西的项目。
 
-When I am not programming, I am probably in some virtual world exploring maps, completing missions, or competing online. Video games are not just my hobby, they also taught me how to solve problems, work in a team, and, above all, not to give up after attempt #847.
+不写代码的时候，我大概正在某个虚拟世界里探索地图、做任务，或者在线对战。游戏不只是我的爱好，它还教会我解决问题、团队协作，以及最重要的——在第 847 次尝试之后依然不放弃。
 
-## What I do
+## 我在做什么
 
-- **Web Development** — I love building modern web experiences with technologies like Astro, React, TypeScript, and everything the JavaScript ecosystem has to offer.
-- **Open Source** — I believe in the power of open source. You can find my projects on [GitHub](https://github.com/0xdres/).
-- **Continuous Learning** — I am always exploring new tools, frameworks, and concepts. Technology evolves fast and I like to keep up with the pace.
+- **Web 开发** — 我喜欢用 Astro、React、TypeScript 以及 JavaScript 生态里的一切，构建现代化的 Web 体验。
+- **开源** — 我相信开源的力量。我的项目都在 [GitHub](https://github.com/0xdres/) 上。
+- **持续学习** — 我总在探索新工具、新框架和新概念。技术演进很快，我喜欢跟上它的节奏。
 
-## Gaming
+## 游戏
 
-Video games are part of my DNA. From epic RPGs to competitive shooters, I enjoy practically any genre. It's that space where creativity meets strategy and pure fun.
+游戏是我 DNA 的一部分。从史诗 RPG 到竞技射击，几乎所有类型我都喜欢。那是创意、策略与纯粹乐趣交汇的地方。
 
-## This blog
+## 这个博客
 
-**Devosfera** was born as a space to document my journey as a developer, share what I learn, and connect with people who share the same passions. Here you will find posts about development, technology, and the occasional random late-night reflection.
+**晚风**诞生于一个朴素的想法：记录我作为开发者的旅程，分享所学，并连接同样热爱这些事物的人。在这里，你会读到关于开发、技术的文章，偶尔还有一些深夜的随想。
 
-> _"Code is poetry, but with more semicolons."_ — Me, probably
+> _「代码是诗，只是分号多了点。」_ —— 大概是我说的

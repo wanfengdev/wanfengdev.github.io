@@ -14,7 +14,7 @@ export function getTargetLanguageUrl(pathname: string, targetLocale: string) {
   }
 
   // Strip existing locale prefix
-  if (path.startsWith("/es/") || path === "/es") {
+  if (path.startsWith("/en/") || path === "/en") {
     path = path.slice(3);
     if (!path.startsWith("/")) {
       path = "/" + path;
@@ -22,15 +22,15 @@ export function getTargetLanguageUrl(pathname: string, targetLocale: string) {
   }
 
   // Prepend new locale if not default
-  if (targetLocale === "es") {
-    return `/es${path === "/" ? "" : path}`;
+  if (targetLocale === "en") {
+    return `/en${path === "/" ? "" : path}`;
   }
   return path;
 }
 
 /**
  * Checks whether a navigation route is active given the current pathname and target route.
- * Handles trailing slashes, locale prefixes (/es/), and matches by exact path or root segment.
+ * Handles trailing slashes, locale prefixes (/en/), and matches by exact path or root segment.
  */
 export function isActive(currentPath: string, targetPath: string): boolean {
   let normalizedCurrent =
@@ -38,7 +38,7 @@ export function isActive(currentPath: string, targetPath: string): boolean {
       ? currentPath.slice(0, -1)
       : currentPath;
 
-  if (normalizedCurrent.startsWith("/es/") || normalizedCurrent === "/es") {
+  if (normalizedCurrent.startsWith("/en/") || normalizedCurrent === "/en") {
     normalizedCurrent = normalizedCurrent.slice(3) || "/";
   }
 

@@ -22,13 +22,18 @@ export function addHeadingLinks() {
     span.ariaHidden = "true";
     span.innerText = "#";
     link.appendChild(span);
-    link.ariaLabel = "link to heading";
+    link.ariaLabel =
+      document.documentElement.lang === "en"
+        ? "link to heading"
+        : "跳转到该标题";
     heading.appendChild(link);
   }
 }
 
 export function attachCopyButtons() {
-  const copyButtonLabel = "Copy";
+  const isEn = document.documentElement.lang === "en";
+  const copyButtonLabel = isEn ? "Copy" : "复制";
+  const copiedLabel = isEn ? "Copied" : "已复制";
   const codeBlocks = Array.from(
     document.querySelectorAll<HTMLPreElement>("pre")
   );
@@ -64,7 +69,7 @@ export function attachCopyButtons() {
 
       await navigator.clipboard.writeText(text ?? "");
 
-      copyButton.innerText = "Copied";
+      copyButton.innerText = copiedLabel;
       setTimeout(() => {
         copyButton.innerText = copyButtonLabel;
       }, 700);

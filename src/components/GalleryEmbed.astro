@@ -25,8 +25,8 @@ type Props = {
 
 const { slug, limit = 6, showLink = true, cols = 3 } = Astro.props;
 
-const locale = Astro.currentLocale || "en";
-const prefix = locale === "es" ? "/es" : "";
+const locale = Astro.currentLocale || "zh";
+const prefix = locale === "en" ? "/en" : "";
 
 // ── 1. Find the collection entry by slug ────────────────────────────
 // Find ALL entries (including drafts) so the embed works in preview;
@@ -34,13 +34,13 @@ const prefix = locale === "es" ? "/es" : "";
 const allGalleries = await getCollection(
   "galleries",
   ({ id }) =>
-    id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"))
+    id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"))
 );
 const entry = allGalleries.find(g => {
   // Normalize separators and strip extension to match purely the slug (excluding locale prefix)
   const normalized = g.id
     .replace(/\\/g, "/")
-    .replace(/^(?:en|es)\//, "")
+    .replace(/^(?:en|zh)\//, "")
     .replace(/\/index\.(md|mdx)$/, "")
     .replace(/\.(md|mdx)$/, "");
   return normalized === slug;
@@ -69,18 +69,18 @@ const gridClass = {
 
 {!entry ? (
   <div class="ge-error">
-    {locale === "es" ? (
-      <>
-        ⚠️ Galería <code>{slug}</code> no encontrada. Verifica que{" "}
-        <code>
-          src/data/galleries/{locale}/{slug}/index.md
-        </code>{" "}
-        exista.
-      </>
-    ) : (
+    {locale === "en" ? (
       <>
         ⚠️ Gallery <code>{slug}</code> not found. Verify that{" "}
         <code>src/data/galleries/{slug}/index.md</code> exists.
+      </>
+    ) : (
+      <>
+        ⚠️ 未找到图集 <code>{slug}</code>。请确认{" "}
+        <code>
+          src/data/galleries/{locale}/{slug}/index.md
+        </code>{" "}
+        存在。
       </>
     )}
   </div>
@@ -106,7 +106,11 @@ const gridClass = {
         <rect x="14" y="14" width="7" height="7" rx="1" />
       </svg>
       <span class="ge-title">{entry.data.title}</span>
-      {remaining > 0 && <span class="ge-count">+{remaining} more</span>}
+      {remaining > 0 && (
+        <span class="ge-count">
+          {locale === "en" ? `+${remaining} more` : `还有 ${remaining} 张`}
+        </span>
+      )}
     </div>
 
     {/* Image grid */}
@@ -114,7 +118,11 @@ const gridClass = {
       <ul
         class:list={["ge-grid", gridClass]}
         role="list"
-        aria-label={`Gallery: ${entry.data.title}`}
+        aria-label={
+          locale === "en"
+            ? `Gallery: ${entry.data.title}`
+            : `图集：${entry.data.title}`
+        }
       >
         {visibleImages.map((img, idx) => (
           <li>
@@ -122,7 +130,11 @@ const gridClass = {
               class="ge-item group"
               data-lb={lbId}
               data-index={idx}
-              aria-label={`View image: ${img.alt}`}
+              aria-label={
+                locale === "en"
+                  ? `View image: ${img.alt}`
+                  : `查看图片：${img.alt}`
+              }
               type="button"
             >
               <Image
@@ -145,9 +157,9 @@ const gridClass = {
       </ul>
     ) : (
       <p class="ge-empty">
-        {locale === "es"
-          ? "Esta galería aún no tiene imágenes."
-          : "This gallery doesn't have any images yet."}
+        {locale === "en"
+          ? "This gallery doesn't have any images yet."
+          : "该图集暂无图片。"}
       </p>
     )}
 
@@ -158,7 +170,7 @@ const gridClass = {
       )}
       {showLink && (
         <a href={`${prefix}/galleries/${slug}`} class="ge-link">
-          {locale === "es" ? "Ver galería completa" : "View full gallery"}
+          {locale === "en" ? "View full gallery" : "查看完整图集"}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="14"
@@ -180,7 +192,14 @@ const gridClass = {
 )}
 
 {entry && visibleImages.length > 0 && (
-  <GalleryLightbox id={lbId} label={`Viewer: ${entry.data.title}`} />
+  <GalleryLightbox
+    id={lbId}
+    label={
+      locale === "en"
+        ? `Viewer: ${entry.data.title}`
+        : `查看器：${entry.data.title}`
+    }
+  />
 )}
 
 <style>

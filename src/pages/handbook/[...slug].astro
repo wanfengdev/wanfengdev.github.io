@@ -1,0 +1,16 @@
+---
+import HandbookChapter from "@/layouts/HandbookChapter.astro";
+import { getSortedChapters, getHandbookRoute } from "@/utils/handbook";
+
+export async function getStaticPaths() {
+  const chapters = await getSortedChapters();
+  return chapters.map(entry => ({
+    params: { slug: getHandbookRoute(entry.id) },
+    props: { entry, chapters },
+  }));
+}
+
+const { entry, chapters } = Astro.props;
+---
+
+<HandbookChapter entry={entry} chapters={chapters} />

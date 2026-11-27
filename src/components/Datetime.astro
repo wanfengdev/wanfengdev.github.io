@@ -20,7 +20,7 @@ const {
 } = Astro.props;
 
 /* ========== Formatted Datetime ========== */
-const locale = Astro.currentLocale || SITE.lang || "en";
+const locale = Astro.currentLocale || SITE.lang || "zh";
 const resolvedTimezone = postTimezone || SITE.timezone;
 const t = useTranslations(locale);
 
@@ -36,10 +36,10 @@ const isModified = Boolean(
 
 const targetDate = isModified && modDate ? modDate : pubDate;
 
-// Formats "15 Jan, 2026" / "15 ene, 2026" using native Intl
+// Formats "15 Jan, 2026" (en) / "2026年1月15日" (zh) using native Intl
 const parts = new Intl.DateTimeFormat(locale, {
   day: "numeric",
-  month: "short",
+  month: locale === "zh" ? "numeric" : "short",
   year: "numeric",
   timeZone: resolvedTimezone,
 }).formatToParts(targetDate);
@@ -47,7 +47,8 @@ const parts = new Intl.DateTimeFormat(locale, {
 const day = parts.find(p => p.type === "day")?.value ?? "";
 const month = parts.find(p => p.type === "month")?.value ?? "";
 const year = parts.find(p => p.type === "year")?.value ?? "";
-const date = `${day} ${month}, ${year}`;
+const date =
+  locale === "zh" ? `${year}年${month}月${day}日` : `${day} ${month}, ${year}`;
 
 const srDate = new Intl.DateTimeFormat(locale, {
   dateStyle: "long",

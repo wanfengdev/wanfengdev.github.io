@@ -19,7 +19,7 @@ export function getPath(
     .split("/")
     .filter(path => path !== "") // remove empty string in the segments
     .filter(path => !path.startsWith("_")) // exclude directories start with underscore "_"
-    .filter(path => path !== "en" && path !== "es") // exclude locale subdirectories en and es
+    .filter(path => path !== "en" && path !== "zh") // exclude locale subdirectories en and zh
     .slice(0, -1) // remove the last segment
     .map(segment => slugifyStr(segment)); // slugify each segment path
 
@@ -27,13 +27,13 @@ export function getPath(
 
   // if file is in the root of BLOG_PATH, return only the slug of the file
   if (!pathSegments || pathSegments.length === 0) {
-    // remove language prefix from id if present (e.g. en/hello-world -> hello-world)
-    const cleanId = id.replace(/^(en|es)\//, "");
+    // remove language prefix from id if present (e.g. zh/hello-world -> hello-world)
+    const cleanId = id.replace(/^(en|zh)\//, "");
     const slug = cleanId.split("/").pop() ?? cleanId;
     return `${basePath}/${slugifyStr(slug)}`;
   }
 
-  const cleanId = id.replace(/^(en|es)\//, "");
+  const cleanId = id.replace(/^(en|zh)\//, "");
   const slug = cleanId.split("/").pop() ?? cleanId;
   return `${basePath}/${pathSegments.join("/")}/${slugifyStr(slug)}`;
 }

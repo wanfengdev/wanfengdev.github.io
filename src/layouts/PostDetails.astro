@@ -23,9 +23,9 @@ type Props = {
 };
 
 const { post, posts } = Astro.props;
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 
 const {
   title,
@@ -240,9 +240,9 @@ const recommendedPost = rawRecommendedPost
             id="read-mode-btn"
             class="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-border/25 bg-muted/10 px-2.5 py-1 opacity-70 backdrop-blur-sm transition-all duration-200 hover:border-accent/30 hover:opacity-100"
             title={
-              locale === "es"
-                ? "Alternar Modo Lectura (Atajo: r)"
-                : "Toggle Reading Mode (Shortcut: r)"
+              locale === "en"
+                ? "Toggle Reading Mode (Shortcut: r)"
+                : "切换阅读模式（快捷键：r）"
             }
             aria-label={t("post.readMode")}
           >
@@ -488,14 +488,14 @@ const recommendedPost = rawRecommendedPost
       <button
         id="reading-font-sans"
         class="cursor-pointer rounded-full bg-accent px-2.5 py-1 text-xs font-medium text-background transition-colors hover:bg-accent/80"
-        title={locale === "es" ? "Tipografía Sans Serif" : "Sans Serif Font"}
+        title={locale === "en" ? "Sans Serif Font" : "无衬线字体"}
       >
         Sans
       </button>
       <button
         id="reading-font-serif"
         class="cursor-pointer rounded-full px-2.5 py-1 text-xs font-medium text-foreground/60 transition-colors hover:bg-foreground/5 hover:text-foreground"
-        title={locale === "es" ? "Tipografía Serif" : "Serif Font"}
+        title={locale === "en" ? "Serif Font" : "衬线字体"}
       >
         Serif
       </button>
@@ -508,12 +508,8 @@ const recommendedPost = rawRecommendedPost
       <button
         id="reading-size-dec"
         class="cursor-pointer rounded-full p-1 text-foreground/60 transition-colors hover:bg-foreground/5 hover:text-foreground"
-        title={
-          locale === "es" ? "Disminuir tamaño de fuente" : "Decrease Font Size"
-        }
-        aria-label={
-          locale === "es" ? "Disminuir tamaño de fuente" : "Decrease Font Size"
-        }
+        title={locale === "en" ? "Decrease Font Size" : "减小字号"}
+        aria-label={locale === "en" ? "Decrease Font Size" : "减小字号"}
       >
         <svg
           class="size-4"
@@ -538,12 +534,8 @@ const recommendedPost = rawRecommendedPost
       <button
         id="reading-size-inc"
         class="cursor-pointer rounded-full p-1 text-foreground/60 transition-colors hover:bg-foreground/5 hover:text-foreground"
-        title={
-          locale === "es" ? "Aumentar tamaño de fuente" : "Increase Font Size"
-        }
-        aria-label={
-          locale === "es" ? "Aumentar tamaño de fuente" : "Increase Font Size"
-        }
+        title={locale === "en" ? "Increase Font Size" : "增大字号"}
+        aria-label={locale === "en" ? "Increase Font Size" : "增大字号"}
       >
         <svg
           class="size-4"
@@ -567,9 +559,9 @@ const recommendedPost = rawRecommendedPost
       id="reading-exit-btn"
       class="flex cursor-pointer items-center gap-1.5 rounded-full bg-foreground/10 px-3 py-1 text-xs font-semibold text-foreground transition-colors hover:bg-foreground/15"
       title={
-        locale === "es"
-          ? "Salir de Modo Lectura (Atajo: r)"
-          : "Exit Reading Mode (Shortcut: r)"
+        locale === "en"
+          ? "Exit Reading Mode (Shortcut: r)"
+          : "退出阅读模式（快捷键：r）"
       }
     >
       <span>{t("post.exit")}</span>
@@ -597,7 +589,7 @@ const recommendedPost = rawRecommendedPost
 
   document.addEventListener("astro:page-load", () => {
     const pathname = window.location.pathname;
-    const isPostPage = pathname.match(/^\/(es\/)?posts\/.+/);
+    const isPostPage = pathname.match(/^\/(en\/)?posts\/.+/);
 
     if (!isPostPage) {
       cleanupReadingMode();

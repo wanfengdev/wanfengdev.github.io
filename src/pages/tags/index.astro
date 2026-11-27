@@ -12,12 +12,12 @@ import postFilter from "@/utils/postFilter";
 import { SITE } from "@/config";
 import { useTranslations } from "@/i18n/utils";
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 
 const isMatchingLocale = (id: string) =>
-  id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"));
+  id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"));
 
 const [blogPosts, galleryPosts] = await Promise.all([
   getCollection(

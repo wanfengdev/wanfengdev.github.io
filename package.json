@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "sync": "astro sync",
     "test": "node --import ./tests/ts-loader.mjs --test tests/*.test.ts",
+    "og:font": "node tools/subset-og-font.mjs",
     "astro": "astro",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
@@ -38,6 +39,7 @@
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
     "prettier-plugin-tailwindcss": "^0.8.1",
+    "subset-font": "^2.9.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2"
   }

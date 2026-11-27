@@ -3,13 +3,12 @@ import type { HTMLAttributes } from "astro/types";
 import { SOCIALS } from "@/constants";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
-import Logo from "@/assets/logo/devosfera.svg";
 import { useTranslations } from "@/i18n/utils";
 
 const currentYear = new Date().getFullYear();
 const socialHeadingId = "footer-social-heading";
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 
 const socialLinks = SOCIALS.map(social => ({
@@ -38,15 +37,17 @@ const { noMarginTop = false, class: className, ...attrs } = Astro.props;
       <!-- Brand column -->
       <div class="flex flex-col items-center gap-3 sm:items-start">
         <a
-          href={locale === "es" ? "/es" : "/"}
+          href={locale === "en" ? "/en" : "/"}
           aria-label={
-            locale === "es"
-              ? `Ir al inicio de ${SITE.title}`
-              : `Go to home of ${SITE.title}`
+            locale === "en"
+              ? `Go to home of ${SITE.title}`
+              : `返回${SITE.title}首页`
           }
           class="group footer-home-link relative flex items-center gap-2 rounded-md text-lg font-bold tracking-tight"
         >
-          <Logo class="footer-logo w-28 opacity-80 transition-all duration-300 group-hover:scale-105 group-hover:opacity-100 dark:invert" />
+          <span class="text-lg font-bold tracking-tight transition-colors duration-300 group-hover:text-accent">
+            {SITE.title}
+          </span>
           <span class="sr-only">{SITE.title}</span>
         </a>
         <p class="max-w-xs text-center font-firacode text-[11px] leading-relaxed tracking-wide text-foreground/55 sm:text-start">

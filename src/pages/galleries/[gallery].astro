@@ -13,15 +13,15 @@ import { getGalleryImages, type GalleryImage } from "@/utils/gallery";
 import { buildGalleryStaticPaths } from "@/utils/staticPaths";
 import GalleryLightbox from "@/components/GalleryLightbox.astro";
 
-export const getStaticPaths = () => buildGalleryStaticPaths("en");
+export const getStaticPaths = () => buildGalleryStaticPaths("zh");
 
 const { entry } = Astro.props;
 const { gallery: slug } = Astro.params;
 const { title, description, pubDatetime, coverImage, tags } = entry.data;
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 
 const images: GalleryImage[] = getGalleryImages(slug, locale, title);
 

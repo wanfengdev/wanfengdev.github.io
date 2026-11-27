@@ -1,0 +1,13 @@
+---
+title: "第 28 章 客户、销售与运营"
+description: "从长周期记忆与内容洞察，到办公提效和零售门店经营，四项实践展示 Agent 在持续理解业务信息和交付工作结果方面的应用。"
+partId: "cases"
+part: "实践篇"
+chapter: "28"
+order: 56
+source: "website/case-28.md"
+---
+
+从长周期记忆与内容洞察，到办公提效和零售门店经营，四项实践展示 Agent 在持续理解业务信息和交付工作结果方面的应用。
+
+<ChapterIndex :chapter="28" />

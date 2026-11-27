@@ -33,8 +33,8 @@ const {
 const { title, description, pubDatetime } = data;
 const modDatetime = "modDatetime" in data ? data.modDatetime : null;
 const tags = "tags" in data ? data.tags : [];
-const locale = Astro.currentLocale || "en";
-const prefix = locale === "es" ? "/es" : "";
+const locale = Astro.currentLocale || "zh";
+const prefix = locale === "en" ? "/en" : "";
 const href = prefix + getEntryPath({ collection, id, filePath });
 const isGallery = collection === "galleries";
 const headingId = `${collection}-${slugifyStr(String(id))}-title`;
@@ -52,7 +52,7 @@ if (SITE.showCoverImages) {
       coverSrc = coverImage;
     } else {
       const gallerySlug = getGallerySlug(id);
-      const galleryLang = id.startsWith("es/") ? "es" : "en";
+      const galleryLang = id.startsWith("en/") ? "en" : "zh";
       const firstImage = getFirstGalleryImage(gallerySlug, galleryLang);
       if (firstImage) {
         coverSrc = firstImage;

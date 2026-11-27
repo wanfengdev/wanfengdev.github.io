@@ -16,14 +16,14 @@ if (!SITE.showGalleries) {
   return Astro.redirect("/404");
 }
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 
 const rawGalleries = await getCollection(
   "galleries",
   entry =>
     (entry.id.startsWith(`${locale}/`) ||
-      (locale === "en" && !entry.id.startsWith("es/"))) &&
+      (locale === "zh" && !entry.id.startsWith("en/"))) &&
     postFilter(entry)
 );
 

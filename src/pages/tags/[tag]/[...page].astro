@@ -11,13 +11,13 @@ import { SITE } from "@/config";
 import { useTranslations } from "@/i18n/utils";
 
 export const getStaticPaths = ({ paginate }: GetStaticPathsOptions) =>
-  buildTagStaticPaths("en", paginate);
+  buildTagStaticPaths("zh", paginate);
 
 const params = Astro.params;
 const { tag } = params;
 const { page, tagName } = Astro.props;
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 
 // Prevent duplicate metadata in tag pagination pages
@@ -28,12 +28,12 @@ const metaTitle =
 
 const tagDescription =
   page.currentPage > 1
-    ? locale === "es"
-      ? `Todos los artículos etiquetados con "${tagName}" en ${SITE.title} (Página ${page.currentPage} de ${page.lastPage}).`
-      : `All articles tagged with "${tagName}" on ${SITE.title} (Page ${page.currentPage} of ${page.lastPage}).`
-    : locale === "es"
-      ? `Todos los artículos etiquetados con "${tagName}" en ${SITE.title}.`
-      : `All articles tagged with "${tagName}" on ${SITE.title}.`;
+    ? locale === "en"
+      ? `All articles tagged with "${tagName}" on ${SITE.title} (Page ${page.currentPage} of ${page.lastPage}).`
+      : `${SITE.title} 中带有「${tagName}」标签的全部文章（第 ${page.currentPage} 页，共 ${page.lastPage} 页）。`
+    : locale === "en"
+      ? `All articles tagged with "${tagName}" on ${SITE.title}.`
+      : `${SITE.title} 中带有「${tagName}」标签的全部文章。`;
 
 const prevURL = page.url.prev
   ? new URL(page.url.prev, SITE.website).toString()

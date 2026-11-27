@@ -14,11 +14,11 @@ import { slugifyStr } from "@/utils/slugify";
 import { SITE } from "@/config";
 import { useTranslations } from "@/i18n/utils";
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 
 const isMatchingLocale = (id: string) =>
-  id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"));
+  id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"));
 
 const [blogPosts, galleryPosts] = await Promise.all([
   getCollection(

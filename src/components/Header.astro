@@ -2,17 +2,15 @@
 /**
  * Header.astro
  *
- * Sticky navigation header with blurred scroll filter, navigation popover,
- * responsive mobile menu, compact audio player, and bilingual switcher.
+ * Sticky navigation header with blurred scroll filter, fully expanded
+ * navigation links, responsive mobile menu, compact audio player, and
+ * bilingual switcher (always the last nav item).
  *
  * Styles live in src/styles/header.css and client logic in src/scripts/header.ts.
  */
 import IconMoon from "@/assets/icons/IconMoon.svg";
 import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
-import IconGallery from "@/assets/icons/IconGallery.svg";
 import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
-import Logo from "@/assets/logo/devosfera.svg";
 import MobileMenu from "./MobileMenu.astro";
 import IntroAudioCompact from "./IntroAudioCompact.astro";
 import { SITE } from "@/config";
@@ -25,14 +23,13 @@ import "@/styles/header.css";
 
 const { pathname } = Astro.url;
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const targetLocale = locale === "es" ? "en" : "es";
+const targetLocale = locale === "en" ? "zh" : "en";
 const targetLanguageUrl = getTargetLanguageUrl(pathname, targetLocale);
-const langToggleTitle =
-  locale === "es" ? "Switch to English" : "Cambiar a Español";
-const langToggleLabel =
-  locale === "es" ? "Switch to English" : "Cambiar a Español";
+const langToggleTitle = locale === "en" ? "切换到中文" : "Switch to English";
+const langChipLabel = targetLocale === "en" ? "EN" : "中文";
+const prefix = locale === "en" ? "/en" : "";
 
 // Remove trailing slash from current pathname if exists
 const currentPath =
@@ -66,11 +63,13 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
       >
         <!-- Logo -->
         <a
-          href={locale === "es" ? "/es" : "/"}
-          aria-label={locale === "es" ? "Devosfera Inicio" : "Devosfera Home"}
+          href={prefix || "/"}
+          aria-label={
+            locale === "en" ? `${SITE.title} Home` : `${SITE.title}首页`
+          }
           class="group relative z-20 flex shrink-0 items-center gap-2 text-xl font-bold tracking-tight sm:text-2xl"
         >
-          <Logo class="w-37.5 dark:invert" />
+          <span class="nav-logo-text">{SITE.title}</span>
         </a>
 
         <!-- Center Audio Player -->
@@ -88,12 +87,22 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
 
         <!-- Nav area -->
         <nav id="nav-menu" class="flex shrink-0 items-center gap-1.5 lg:gap-1">
+          <!-- Mobile search button (visible only on screens < 1024px) -->
+          <button
+            data-search-trigger
+            class="nav-icon-btn lg:hidden!"
+            title={locale === "en" ? "Search" : "搜索"}
+            aria-label={t("nav.openSearch")}
+          >
+            <IconSearch class="size-4.5" />
+          </button>
+
           <!-- Mobile language switcher chip (visible only on screens < 1024px) -->
           <a
             href={targetLanguageUrl}
             class="nav-lang-chip lg:hidden!"
             title={langToggleTitle}
-            aria-label={langToggleLabel}
+            aria-label={langToggleTitle}
             data-lang-toggle={targetLocale}
           >
             <svg
@@ -110,20 +119,8 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
                 d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5c-.03.077-.07.154-.114.23-.9 1.54-2.11 3.05-3.535 4.5M6.412 9a14.95 14.95 0 003.535 4.5m0 0a14.973 14.973 0 01-3.298 3.19M6.412 9H3.9M15 9h-2.5"
               ></path>
             </svg>
-            <span class="nav-lang-chip-label">
-              {targetLocale.toUpperCase()}
-            </span>
+            <span class="nav-lang-chip-label">{langChipLabel}</span>
           </a>
-
-          <!-- Mobile search button (visible only on screens < 1024px) -->
-          <button
-            data-search-trigger
-            class="nav-icon-btn lg:hidden!"
-            title={locale === "es" ? "Buscar" : "Search"}
-            aria-label={t("nav.openSearch")}
-          >
-            <IconSearch class="size-4.5" />
-          </button>
 
           <!-- Mobile hamburger (animated lines) -->
           <button
@@ -144,10 +141,10 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
 
           <!-- Desktop links (always visible on lg+) -->
           <ul class="hidden lg:flex lg:flex-row lg:items-center lg:gap-1">
-            <!-- Primary nav: Posts · About -->
+            <!-- Primary nav: all sections expanded -->
             <li>
               <a
-                href={locale === "es" ? "/es/posts" : "/posts"}
+                href={`${prefix}/posts`}
                 class:list={["nav-link", { "nav-active": isActive("/posts") }]}
               >
                 {t("nav.posts")}
@@ -155,12 +152,57 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
             </li>
             <li>
               <a
-                href={locale === "es" ? "/es/about" : "/about"}
+                href={`${prefix}/handbook`}
+                class:list={[
+                  "nav-link",
+                  { "nav-active": isActive("/handbook") },
+                ]}
+              >
+                {t("nav.handbook")}
+              </a>
+            </li>
+            <li>
+              <a
+                href={`${prefix}/about`}
                 class:list={["nav-link", { "nav-active": isActive("/about") }]}
               >
                 {t("nav.about")}
               </a>
             </li>
+            <li>
+              <a
+                href={`${prefix}/tags`}
+                class:list={["nav-link", { "nav-active": isActive("/tags") }]}
+              >
+                {t("nav.tags")}
+              </a>
+            </li>
+            {SITE.showArchives && (
+              <li>
+                <a
+                  href={`${prefix}/archives`}
+                  class:list={[
+                    "nav-link",
+                    { "nav-active": isActive("/archives") },
+                  ]}
+                >
+                  {t("nav.archives")}
+                </a>
+              </li>
+            )}
+            {SITE.showGalleries && (
+              <li>
+                <a
+                  href={`${prefix}/galleries`}
+                  class:list={[
+                    "nav-link",
+                    { "nav-active": isActive("/galleries") },
+                  ]}
+                >
+                  {t("nav.galleries")}
+                </a>
+              </li>
+            )}
 
             <!-- Separator -->
             <li class="flex items-center px-1" aria-hidden="true">
@@ -172,7 +214,7 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
               <button
                 data-search-trigger
                 class="nav-search-btn"
-                title={locale === "es" ? "Buscar (⌘K)" : "Search (⌘K)"}
+                title={locale === "en" ? "Search (⌘K)" : "搜索 (⌘K)"}
                 aria-label={t("nav.openSearch")}
                 aria-keyshortcuts="Meta+K"
               >
@@ -181,18 +223,34 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
               </button>
             </li>
 
+            <!-- Theme toggle -->
+            {SITE.lightAndDarkMode && (
+              <li class="flex items-center">
+                <button
+                  id="theme-btn"
+                  class="nav-icon-btn"
+                  title={t("nav.theme")}
+                  aria-label="auto"
+                  aria-live="polite"
+                >
+                  <IconMoon class="size-4.5 block dark:hidden" />
+                  <IconSunHigh class="size-4.5 hidden dark:block" />
+                </button>
+              </li>
+            )}
+
             <!-- Separator -->
             <li class="flex items-center px-1" aria-hidden="true">
               <div class="h-4 w-px bg-border/30"></div>
             </li>
 
-            <!-- Language switcher chip -->
+            <!-- Language switcher chip (always last) -->
             <li class="flex items-center">
               <a
                 href={targetLanguageUrl}
                 class="nav-lang-chip"
                 title={langToggleTitle}
-                aria-label={langToggleLabel}
+                aria-label={langToggleTitle}
                 data-lang-toggle={targetLocale}
               >
                 <svg
@@ -209,156 +267,8 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
                     d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5c-.03.077-.07.154-.114.23-.9 1.54-2.11 3.05-3.535 4.5M6.412 9a14.95 14.95 0 003.535 4.5m0 0a14.973 14.973 0 01-3.298 3.19M6.412 9H3.9M15 9h-2.5"
                   ></path>
                 </svg>
-                <span class="nav-lang-chip-label">
-                  {targetLocale.toUpperCase()}
-                </span>
+                <span class="nav-lang-chip-label">{langChipLabel}</span>
               </a>
-            </li>
-
-            <!-- Separator -->
-            <li class="flex items-center px-1" aria-hidden="true">
-              <div class="h-4 w-px bg-border/30"></div>
-            </li>
-
-            <!-- ··· More button with popover -->
-            <li class="more-btn-container relative flex items-center">
-              <button
-                id="more-btn"
-                class="nav-icon-btn relative"
-                title={locale === "es" ? "Más opciones" : "More options"}
-                aria-label={locale === "es" ? "Más opciones" : "More options"}
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <!-- Three dots icon -->
-                <svg
-                  class="size-4.5"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <circle cx="5" cy="12" r="1.5"></circle>
-                  <circle cx="12" cy="12" r="1.5"></circle>
-                  <circle cx="19" cy="12" r="1.5"></circle>
-                </svg>
-              </button>
-
-              <!-- More Popover -->
-              <div
-                id="more-popover"
-                class="more-popover hidden"
-                role="dialog"
-                aria-label={locale === "es" ? "Más opciones" : "More options"}
-              >
-                <!-- Section: Explore -->
-                <div class="popover-section">
-                  <p class="popover-section-label">
-                    {locale === "es" ? "Explorar" : "Explore"}
-                  </p>
-                  <div class="popover-links">
-                    <a
-                      href={locale === "es" ? "/es/tags" : "/tags"}
-                      class:list={[
-                        "popover-link",
-                        { "popover-link-active": isActive("/tags") },
-                      ]}
-                    >
-                      <!-- Tag icon -->
-                      <svg
-                        class="size-3.5 shrink-0"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="1.8"
-                        aria-hidden="true"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M7 7h.01M3 7l6 6 6 6 6-6-6-6-6-6-6 6z"
-                        ></path>
-                      </svg>
-                      {t("nav.tags")}
-                    </a>
-                    {SITE.showArchives && (
-                      <a
-                        href={locale === "es" ? "/es/archives" : "/archives"}
-                        class:list={[
-                          "popover-link",
-                          { "popover-link-active": isActive("/archives") },
-                        ]}
-                      >
-                        <IconArchive class="size-3.5 shrink-0" />
-                        {t("nav.archives")}
-                      </a>
-                    )}
-                    {SITE.showGalleries && (
-                      <a
-                        href={locale === "es" ? "/es/galleries" : "/galleries"}
-                        class:list={[
-                          "popover-link",
-                          { "popover-link-active": isActive("/galleries") },
-                        ]}
-                      >
-                        <IconGallery class="size-3.5 shrink-0" />
-                        {t("nav.galleries")}
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                {SITE.lightAndDarkMode && (
-                  <>
-                    <!-- Divider -->
-                    <div class="popover-divider" aria-hidden="true"></div>
-
-                    <!-- Section: Preferences -->
-                    <div class="popover-section">
-                      <p class="popover-section-label">
-                        {locale === "es" ? "Preferencias" : "Preferences"}
-                      </p>
-                      <div class="popover-links">
-                        <!-- Theme toggle row -->
-                        <div class="popover-row">
-                          <div class="popover-row-label">
-                            <svg
-                              class="size-3.5 shrink-0"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              stroke-width="1.8"
-                              aria-hidden="true"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707M17.657 17.657l-.707-.707M6.343 6.343l-.707-.707M12 7a5 5 0 110 10A5 5 0 0112 7z"
-                              />
-                            </svg>
-                            {locale === "es" ? "Tema" : "Theme"}
-                          </div>
-                          <button
-                            id="theme-btn"
-                            class="theme-toggle-pill"
-                            title={t("nav.theme")}
-                            aria-label="auto"
-                            aria-live="polite"
-                          >
-                            <span class="theme-pill-option block dark:hidden">
-                              <IconMoon class="size-3" />
-                              {locale === "es" ? "Oscuro" : "Dark"}
-                            </span>
-                            <span class="theme-pill-option hidden dark:flex">
-                              <IconSunHigh class="size-3" />
-                              {locale === "es" ? "Claro" : "Light"}
-                            </span>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
             </li>
           </ul>
         </nav>

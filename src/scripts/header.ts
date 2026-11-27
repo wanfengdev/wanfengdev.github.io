@@ -1,6 +1,5 @@
 let scrollCleanup: AbortController | null = null;
 let mobileNavCleanup: AbortController | null = null;
-let moreCleanup: AbortController | null = null;
 
 function setupScrollPhysics() {
   if (scrollCleanup) scrollCleanup.abort();
@@ -78,96 +77,7 @@ function setupMobileNav() {
   });
 }
 
-function setupMorePopover() {
-  if (moreCleanup) moreCleanup.abort();
-  moreCleanup = new AbortController();
-  const { signal } = moreCleanup;
-
-  const moreBtn = document.getElementById("more-btn");
-  const morePopover = document.getElementById("more-popover");
-
-  if (!moreBtn || !morePopover) return;
-
-  const openPopover = () => {
-    moreBtn.setAttribute("aria-expanded", "true");
-    morePopover.classList.remove("hidden");
-  };
-
-  const closePopover = () => {
-    moreBtn.setAttribute("aria-expanded", "false");
-    morePopover.classList.add("hidden");
-  };
-
-  moreBtn.addEventListener(
-    "click",
-    e => {
-      e.stopPropagation();
-      const isExpanded = moreBtn.getAttribute("aria-expanded") === "true";
-      if (isExpanded) {
-        closePopover();
-      } else {
-        openPopover();
-      }
-    },
-    { signal }
-  );
-
-  // Close when clicking outside
-  document.addEventListener(
-    "click",
-    e => {
-      const target = e.target as HTMLElement;
-      if (
-        !morePopover.classList.contains("hidden") &&
-        !morePopover.contains(target) &&
-        target !== moreBtn &&
-        !moreBtn.contains(target)
-      ) {
-        closePopover();
-      }
-    },
-    { signal }
-  );
-
-  // Close popover on Escape key
-  document.addEventListener(
-    "keydown",
-    e => {
-      if (e.key === "Escape" && !morePopover.classList.contains("hidden")) {
-        closePopover();
-        moreBtn.focus();
-      }
-    },
-    { signal }
-  );
-
-  // Close popover on scroll
-  window.addEventListener("scroll", closePopover, { passive: true, signal });
-
-  // Close popover when focus leaves the container
-  morePopover.addEventListener(
-    "focusout",
-    e => {
-      const relatedTarget = e.relatedTarget as HTMLElement;
-      if (
-        relatedTarget &&
-        !morePopover.contains(relatedTarget) &&
-        relatedTarget !== moreBtn
-      ) {
-        closePopover();
-      }
-    },
-    { signal }
-  );
-
-  // Close popover when a link inside is clicked
-  morePopover.querySelectorAll("a").forEach(link => {
-    link.addEventListener("click", closePopover, { signal });
-  });
-}
-
 export function initHeader() {
   setupScrollPhysics();
   setupMobileNav();
-  setupMorePopover();
 }

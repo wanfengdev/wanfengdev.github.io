@@ -6,9 +6,9 @@ import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
 import { useTranslations } from "@/i18n/utils";
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const esT = useTranslations("es");
+const enT = useTranslations("en");
 ---
 
 <Layout title={`404 | ${SITE.title}`}>
@@ -24,15 +24,15 @@ const esT = useTranslations("es");
       <p
         id="not-found-title"
         class="mt-4 text-2xl sm:text-3xl"
-        data-es-title={esT("404.title")}
+        data-en-title={enT("404.title")}
       >
         {t("404.title")}
       </p>
       <LinkButton
         id="not-found-home"
-        href={locale === "es" ? "/es" : "/"}
+        href={locale === "en" ? "/en" : "/"}
         class="my-6 text-lg underline decoration-dashed underline-offset-8"
-        data-es-back={esT("404.back")}
+        data-en-back={enT("404.back")}
       >
         {t("404.back")}
       </LinkButton>
@@ -45,19 +45,19 @@ const esT = useTranslations("es");
 <script>
   document.addEventListener("astro:page-load", () => {
     const pathname = window.location.pathname;
-    if (pathname === "/es" || pathname.startsWith("/es/")) {
+    if (pathname === "/en" || pathname.startsWith("/en/")) {
       const titleEl = document.getElementById("not-found-title");
       const homeLink = document.getElementById(
         "not-found-home"
       ) as HTMLAnchorElement | null;
       if (titleEl) {
         titleEl.textContent =
-          titleEl.getAttribute("data-es-title") || titleEl.textContent;
+          titleEl.getAttribute("data-en-title") || titleEl.textContent;
       }
       if (homeLink) {
-        homeLink.href = "/es";
+        homeLink.href = "/en";
         homeLink.textContent =
-          homeLink.getAttribute("data-es-back") || homeLink.textContent;
+          homeLink.getAttribute("data-en-back") || homeLink.textContent;
       }
     }
   });

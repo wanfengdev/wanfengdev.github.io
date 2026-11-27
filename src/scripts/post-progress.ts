@@ -149,9 +149,9 @@ export function initReadingPosition() {
         "Continue reading from where you left off?";
       const resumeBtnText = mainEl?.getAttribute("data-resume-btn") || "Resume";
 
-      const lang = document.documentElement.lang || "en";
-      const orText = lang === "es" ? "o" : "or";
-      const dismissLabel = lang === "es" ? "Descartar" : "Dismiss";
+      const lang = document.documentElement.lang || "zh";
+      const orText = lang === "en" ? "or" : "或";
+      const dismissLabel = lang === "en" ? "Dismiss" : "忽略";
 
       toast = document.createElement("div");
       toast.className =

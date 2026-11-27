@@ -1,14 +1,16 @@
 /**
  * Calculates the estimated reading time for a given piece of text.
  * Strips markdown/MDX syntax before counting words for a more accurate result.
+ * Chinese text is counted by characters (~300 chars/min), other locales by words.
  *
  * @param body - Raw markdown/MDX string content
+ * @param locale - Content locale (default: zh)
  * @param wordsPerMinute - Average reading speed (default: 200 wpm)
- * @returns Formatted string like "3 min read" or "< 1 min read"
+ * @returns Formatted string like "3 min read" / "3 分钟阅读"
  */
 export function getReadingTime(
   body: string,
-  locale = "en",
+  locale = "zh",
   wordsPerMinute = 200
 ): string {
   // Strip frontmatter
@@ -26,11 +28,18 @@ export function getReadingTime(
     .replace(/\s+/g, " ") // collapse whitespace
     .trim();
 
+  if (locale === "zh") {
+    const cjkChars = (plainText.match(/[㐀-䶿一-鿿]/g) || []).length;
+    const latinWords = plainText
+      .replace(/[㐀-䶿一-鿿]/g, " ")
+      .split(" ")
+      .filter(Boolean).length;
+    const minutes = Math.ceil(cjkChars / 300 + latinWords / wordsPerMinute);
+    return minutes < 1 ? "< 1 分钟阅读" : `${minutes} 分钟阅读`;
+  }
+
   const wordCount = plainText.split(" ").filter(Boolean).length;
   const minutes = Math.ceil(wordCount / wordsPerMinute);
 
-  if (locale === "es") {
-    return minutes < 1 ? "< 1 min de lectura" : `${minutes} min de lectura`;
-  }
   return minutes < 1 ? "< 1 min read" : `${minutes} min read`;
 }

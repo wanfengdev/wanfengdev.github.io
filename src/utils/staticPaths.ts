@@ -8,10 +8,10 @@ import getSortedPosts from "./getSortedPosts";
 import getUniqueTags from "./getUniqueTags";
 import postFilter from "./postFilter";
 
-type Locale = "en" | "es";
+type Locale = "zh" | "en";
 
 const isMatchingLocale = (id: string, locale: Locale) =>
-  id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"));
+  id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"));
 
 export async function buildPostStaticPaths(locale: Locale) {
   const posts = await getCollection("blog", ({ id }) =>

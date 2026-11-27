@@ -1,0 +1,13 @@
+---
+import Page from "./index.astro";
+import { getSortedChapters, getHandbookRoute } from "@/utils/handbook";
+
+export async function getStaticPaths() {
+  const chapters = await getSortedChapters();
+  return chapters.map(entry => ({
+    params: { slug: getHandbookRoute(entry.id) },
+  }));
+}
+---
+
+<Page />

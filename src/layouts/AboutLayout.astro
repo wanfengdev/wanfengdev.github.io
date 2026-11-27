@@ -11,7 +11,7 @@ import { useTranslations } from "@/i18n/utils";
 type Props = MarkdownLayoutProps<{ title: string; description?: string }>;
 
 const { frontmatter } = Astro.props;
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 ---
 

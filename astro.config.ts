@@ -19,8 +19,8 @@ export default defineConfig({
   // the whole UI was designed around.
   compressHTML: true,
   i18n: {
-    defaultLocale: "en",
-    locales: ["en", "es"],
+    defaultLocale: "zh",
+    locales: ["zh", "en"],
     routing: {
       prefixDefaultLocale: false,
     },

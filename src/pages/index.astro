@@ -14,9 +14,9 @@ import { SOCIALS } from "@/constants";
 import IntroAudio from "@/components/IntroAudio.astro";
 import { useTranslations } from "@/i18n/utils";
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 
 const [blogPosts, galleryPosts] = await Promise.all([
   getCollection("blog", ({ id }) => id.startsWith(`${locale}/`)),

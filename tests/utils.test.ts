@@ -21,10 +21,11 @@ test("slugifyStr normalizes diacritics, versions, punctuation, and unicode", () 
 });
 
 test("getReadingTime strips frontmatter/code and formats by locale", () => {
-  assert.equal(getReadingTime(""), "< 1 min read");
-  assert.equal(getReadingTime("", "es"), "< 1 min de lectura");
-  assert.equal(getReadingTime("word ".repeat(400)), "2 min read");
-  assert.equal(getReadingTime("palabra ".repeat(400), "es"), "2 min de lectura");
+  assert.equal(getReadingTime(""), "< 1 分钟阅读");
+  assert.equal(getReadingTime("", "en"), "< 1 min read");
+  assert.equal(getReadingTime("word ".repeat(400), "en"), "2 min read");
+  assert.equal(getReadingTime("字".repeat(600), "zh"), "2 分钟阅读");
+  assert.equal(getReadingTime("字".repeat(100), "zh"), "1 分钟阅读");
 
   const withCode = `---
 title: Demo
@@ -35,23 +36,26 @@ ${"const x = 1;\n".repeat(300)}
 \`\`\`
 
 Just a short \`inlineCode()\` paragraph here.`;
-  assert.equal(getReadingTime(withCode), "1 min read");
+  assert.equal(getReadingTime(withCode, "en"), "1 min read");
 });
 
 test("i18n helpers switch locale prefixes and match active routes", () => {
-  assert.equal(getTargetLanguageUrl("/", "es"), "/es");
-  assert.equal(getTargetLanguageUrl("/posts/hello", "es"), "/es/posts/hello");
-  assert.equal(getTargetLanguageUrl("/es", "en"), "/");
-  assert.equal(getTargetLanguageUrl("/es/posts/hello", "en"), "/posts/hello");
+  assert.equal(getTargetLanguageUrl("/", "en"), "/en");
+  assert.equal(getTargetLanguageUrl("/posts/hello", "en"), "/en/posts/hello");
+  assert.equal(getTargetLanguageUrl("/en", "zh"), "/");
+  assert.equal(getTargetLanguageUrl("/en/posts/hello", "zh"), "/posts/hello");
 
-  assert.equal(isActive("/es/posts/my-article/", "/posts"), true);
+  assert.equal(isActive("/en/posts/my-article/", "/posts"), true);
   assert.equal(isActive("/archives/", "/posts"), false);
 });
 
 test("buildBreadcrumbItems translates segments and compacts pagination", () => {
   assert.deepEqual(buildBreadcrumbItems("/"), []);
-  assert.deepEqual(buildBreadcrumbItems("/es/posts/2", { locale: "es" }), [
-    { label: "Publicaciones #2", href: null },
+  assert.deepEqual(buildBreadcrumbItems("/en/posts/2", { locale: "en" }), [
+    { label: "Posts #2", href: null },
+  ]);
+  assert.deepEqual(buildBreadcrumbItems("/posts/2", { locale: "zh" }), [
+    { label: "文章 #2", href: null },
   ]);
   assert.deepEqual(buildBreadcrumbItems("/tags/astro-v7"), [
     { label: "Tags", href: "/tags/" },
@@ -61,15 +65,15 @@ test("buildBreadcrumbItems translates segments and compacts pagination", () => {
 
 test("getPath skips _-prefixed dirs and slugifies nested subdirectories", () => {
   assert.equal(
-    getPath("en/hello-world", "src/data/blog/en/hello-world.mdx", false),
+    getPath("zh/hello-world", "src/data/blog/zh/hello-world.mdx", false),
     "/hello-world"
   );
   assert.equal(
-    getPath("en/_2026/draft-note", "src/data/blog/en/_2026/draft-note.md", false),
+    getPath("zh/_2026/draft-note", "src/data/blog/zh/_2026/draft-note.md", false),
     "/draft-note"
   );
   assert.equal(
-    getPath("es/Web Dev/mi-post", "src/data/blog/es/Web Dev/mi-post.mdx", true),
+    getPath("en/Web Dev/mi-post", "src/data/blog/en/Web Dev/mi-post.mdx", true),
     "/posts/web-dev/mi-post"
   );
 });

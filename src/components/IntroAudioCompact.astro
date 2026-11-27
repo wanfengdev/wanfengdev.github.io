@@ -206,9 +206,9 @@ const isStream = streamOverride ?? /^https?:\/\//i.test(src);
       const isHome =
         pathname === "/" ||
         pathname === "/index.html" ||
-        pathname === "/es" ||
-        pathname === "/es/" ||
-        pathname === "/es/index.html";
+        pathname === "/en" ||
+        pathname === "/en/" ||
+        pathname === "/en/index.html";
       wrap.classList.toggle(
         "is-visible",
         !isHome && (state.playing || state.hasStarted)

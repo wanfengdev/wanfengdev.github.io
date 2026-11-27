@@ -23,13 +23,13 @@ const decodeSegment = (value: string) => {
 };
 
 const translations: Record<string, Record<string, string>> = {
-  es: {
-    posts: "Publicaciones",
-    tags: "Etiquetas",
-    about: "Sobre mí",
-    search: "Buscar",
-    archives: "Archivo",
-    galleries: "Galerías",
+  zh: {
+    posts: "文章",
+    tags: "标签",
+    about: "关于",
+    search: "搜索",
+    archives: "归档",
+    galleries: "图集",
   },
 };
 
@@ -55,7 +55,7 @@ export const formatPathSegmentLabel = (segment: string, locale?: string) => {
 
 export const getPathSegments = (pathname: string) => {
   const segments = normalizePathname(pathname).split("/").filter(Boolean);
-  if (segments[0] === "es") {
+  if (segments[0] === "en") {
     return segments.slice(1);
   }
   return segments;
@@ -65,7 +65,7 @@ const buildDefaultBreadcrumbItems = (
   segments: string[],
   locale?: string
 ): BreadcrumbItem[] => {
-  const prefix = locale === "es" ? "/es" : "";
+  const prefix = locale === "en" ? "/en" : "";
   return segments.map((segment, index) => ({
     label: formatPathSegmentLabel(segment, locale),
     href:

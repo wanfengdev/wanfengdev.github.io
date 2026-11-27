@@ -5,11 +5,11 @@ import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
 import { useTranslations } from "@/i18n/utils";
 
-export async function generateLocaleRss(locale: "en" | "es") {
+export async function generateLocaleRss(locale: "zh" | "en") {
   const t = useTranslations(locale);
-  const prefix = locale === "es" ? "/es" : "";
+  const prefix = locale === "en" ? "/en" : "";
   const isMatchingLocale = (id: string) =>
-    id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"));
+    id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"));
 
   const [blogPosts, galleryPosts] = await Promise.all([
     getCollection("blog", ({ id }) => isMatchingLocale(id)),
@@ -20,7 +20,7 @@ export async function generateLocaleRss(locale: "en" | "es") {
   const sortedPosts = getSortedPosts([...blogPosts, ...galleryPosts]);
   return rss({
     title: SITE.title,
-    description: locale === "es" ? t("index.heroDesc") : SITE.desc,
+    description: t("index.heroDesc"),
     site: SITE.website,
     items: sortedPosts.map(entry => ({
       link: `${prefix}${getEntryPath(entry)}`,
@@ -35,4 +35,4 @@ export async function generateLocaleRss(locale: "en" | "es") {
   });
 }
 
-export const GET = () => generateLocaleRss("en");
+export const GET = () => generateLocaleRss("zh");

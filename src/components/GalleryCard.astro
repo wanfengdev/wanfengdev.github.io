@@ -25,9 +25,9 @@ const {
 const { title, description, pubDatetime, coverImage } = gallery.data;
 const coverSrc = coverImage ?? fallbackImage;
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 ---
 
 <a

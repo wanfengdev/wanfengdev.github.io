@@ -1,0 +1,214 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Breadcrumb from "@/components/Breadcrumb.astro";
+import AuroraHero from "@/components/AuroraHero.astro";
+import {
+  getSortedChapters,
+  groupByPart,
+  buildTree,
+  getHandbookPath,
+  isGuide,
+  isTopic,
+  handbookMeta,
+} from "@/utils/handbook";
+import { SITE } from "@/config";
+import { useTranslations } from "@/i18n/utils";
+
+const locale = Astro.currentLocale || "zh";
+const t = useTranslations(locale);
+
+const chapters = await getSortedChapters();
+const groups = groupByPart(chapters);
+const chapterCount = new Set(
+  chapters
+    .filter(e => /^\d+$/.test(String(e.data.chapter ?? "")))
+    .map(e => String(e.data.chapter))
+).size;
+---
+
+<Layout
+  title={`AI Agent Handbook | ${SITE.title}`}
+  description={t("handbook.desc")}
+>
+  <Header />
+  <Breadcrumb />
+  <main id="main-content" class="app-layout pb-12">
+    <AuroraHero title="AI Agent Handbook" description={t("handbook.desc")}>
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <span class="hero-badge">
+          {chapterCount} {t("handbook.stats.chapters")}
+        </span>
+        <span class="hero-badge">
+          {groups.length} {t("handbook.stats.parts")}
+        </span>
+        <span class="hero-badge">
+          {chapters.length} {t("handbook.stats.pages")}
+        </span>
+      </div>
+    </AuroraHero>
+
+    <!-- Attribution -->
+    <div class="mb-10 rounded-2xl border border-border/20 bg-muted/5 px-5 py-4 text-sm leading-relaxed text-foreground/60">
+      {t("handbook.licenseNote")}
+      <a
+        href={handbookMeta.repository}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="ml-1 text-accent underline decoration-dashed underline-offset-4 hover:text-accent/80"
+      >
+        {t("handbook.viewSource")}
+      </a>
+    </div>
+
+    <!-- Contents by part -->
+    <div class="flex flex-col gap-10">
+      {groups.map(({ part, entries }) => (
+        <section>
+          <div class="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <h2 class="text-xl font-bold tracking-tight text-foreground">
+              {part.title}
+            </h2>
+            <span class="font-firacode text-xs tracking-wider text-accent/70 uppercase">
+              {part.english}
+              {part.range && ` · ${part.range}`}
+            </span>
+          </div>
+          <p class="mb-4 text-sm text-foreground/55">{part.description}</p>
+
+          <ul class="handbook-toc-list">
+            {buildTree(entries).map(node => (
+              <li>
+                {node.children.length > 0 ? (
+                  <div class="handbook-toc-group">
+                    <a
+                      href={getHandbookPath(node.entry.id)}
+                      class="handbook-toc-row font-semibold"
+                    >
+                      <span class="handbook-toc-title">
+                        {node.entry.data.title}
+                      </span>
+                      {isTopic(node.entry) && (
+                        <span class="handbook-toc-badge">
+                          {t("handbook.topic")}
+                        </span>
+                      )}
+                    </a>
+                    <ul class="handbook-toc-children">
+                      {node.children.map(child => (
+                        <li>
+                          <a
+                            href={getHandbookPath(child.entry.id)}
+                            class="handbook-toc-row"
+                          >
+                            <span class="handbook-toc-title">
+                              {child.entry.data.title}
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : (
+                  <a
+                    href={getHandbookPath(node.entry.id)}
+                    class="handbook-toc-row"
+                  >
+                    <span class="handbook-toc-title">
+                      {node.entry.data.title}
+                    </span>
+                    {isGuide(node.entry) && (
+                      <span class="handbook-toc-badge">
+                        {t("handbook.guide")}
+                      </span>
+                    )}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Layout>
+
+<style>
+  .handbook-toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .handbook-toc-row {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    border-radius: 0.75rem;
+    border: 1px solid transparent;
+    color: var(--foreground);
+    text-decoration: none;
+    transition:
+      color 0.15s ease,
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .handbook-toc-row:hover {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 20%, transparent);
+  }
+
+  .handbook-toc-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+  }
+
+  .handbook-toc-badge {
+    flex-shrink: 0;
+    font-family: var(--font-firacode, monospace);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--accent);
+  }
+
+  .handbook-toc-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .handbook-toc-children {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.25rem 1.25rem;
+    border-left: 1px solid color-mix(in srgb, var(--border) 40%, transparent);
+    margin-left: 1.125rem;
+  }
+
+  .handbook-toc-children .handbook-toc-row {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .handbook-toc-children .handbook-toc-title {
+    font-size: 0.875rem;
+    color: color-mix(in srgb, var(--foreground) 78%, transparent);
+  }
+</style>

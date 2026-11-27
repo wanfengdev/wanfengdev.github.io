@@ -28,7 +28,7 @@ const {
   author = SITE.author,
   profile = SITE.profile,
   description = SITE.desc,
-  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/devosfera-og.webp",
+  ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/wanfeng-og.webp",
   canonicalURL: canonicalURLProp,
   pubDatetime,
   modDatetime,
@@ -39,7 +39,7 @@ const {
   tags,
 } = Astro.props;
 
-const locale = Astro.currentLocale || SITE.lang || "en";
+const locale = Astro.currentLocale || SITE.lang || "zh";
 const t = useTranslations(locale);
 
 // Always build canonical from SITE.website (production URL), never localhost.
@@ -49,12 +49,12 @@ const canonicalURL =
   canonicalURLProp ??
   new URL(rawPath === "" ? "/" : `${rawPath}/`, SITE.website);
 
-const enUrl = new URL(
-  getTargetLanguageUrl(Astro.url.pathname, "en"),
+const zhUrl = new URL(
+  getTargetLanguageUrl(Astro.url.pathname, "zh"),
   Astro.site ?? SITE.website
 );
-const esUrl = new URL(
-  getTargetLanguageUrl(Astro.url.pathname, "es"),
+const enUrl = new URL(
+  getTargetLanguageUrl(Astro.url.pathname, "en"),
   Astro.site ?? SITE.website
 );
 
@@ -92,15 +92,15 @@ const finalStructuredData =
           ...(profile && { url: profile }),
         },
       }
-    : rawPath === "" || rawPath === "/es"
+    : rawPath === "" || rawPath === "/en"
       ? {
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: SITE.title,
           url: SITE.website,
-          description: locale === "es" ? t("index.heroDesc") : SITE.desc,
+          description: t("index.heroDesc"),
         }
-      : rawPath === "/about" || rawPath === "/es/about"
+      : rawPath === "/about" || rawPath === "/en/about"
         ? {
             "@context": "https://schema.org",
             "@type": "ProfilePage",
@@ -108,9 +108,9 @@ const finalStructuredData =
               "@type": "Person",
               name: author,
               description:
-                locale === "es"
-                  ? "Desarrollador, estudiante y videojugador. Creador de Astro Devosfera."
-                  : "Developer, student, and gamer. Creator of Astro Devosfera.",
+                locale === "en"
+                  ? "Developer, student, and gamer. Creator of Wanfeng blog."
+                  : "开发者、学生、游戏玩家。晚风博客的创造者。",
               ...(profile && { url: profile }),
             },
           }
@@ -131,8 +131,8 @@ const showGrain = SITE.backdropEffects.grain;
       try {
         if (window.location.pathname === "/") {
           const preferredLang = localStorage.getItem("preferred-lang");
-          if (preferredLang === "es") {
-            window.location.replace("/es");
+          if (preferredLang === "en") {
+            window.location.replace("/en");
           }
         }
       } catch {}
@@ -143,9 +143,9 @@ const showGrain = SITE.backdropEffects.grain;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonicalURL} />
+    <link rel="alternate" hreflang="zh" href={zhUrl} />
     <link rel="alternate" hreflang="en" href={enUrl} />
-    <link rel="alternate" hreflang="es" href={esUrl} />
-    <link rel="alternate" hreflang="x-default" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={zhUrl} />
     <meta name="generator" content={Astro.generator} />
 
     <!-- Relational Pagination Links -->
@@ -170,10 +170,10 @@ const showGrain = SITE.backdropEffects.grain;
     <!-- Open Graph / Facebook -->
     <meta property="og:site_name" content={SITE.title} />
     <meta property="og:type" content={isArticle ? "article" : "website"} />
-    <meta property="og:locale" content={locale === "es" ? "es_ES" : "en_US"} />
+    <meta property="og:locale" content={locale === "en" ? "en_US" : "zh_CN"} />
     <meta
       property="og:locale:alternate"
-      content={locale === "es" ? "en_US" : "es_ES"}
+      content={locale === "en" ? "zh_CN" : "en_US"}
     />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -222,7 +222,7 @@ const showGrain = SITE.backdropEffects.grain;
       rel="alternate"
       type="application/rss+xml"
       title={SITE.title}
-      href={new URL(locale === "es" ? "es/rss.xml" : "rss.xml", Astro.site)}
+      href={new URL(locale === "en" ? "en/rss.xml" : "rss.xml", Astro.site)}
     />
 
     {
@@ -482,24 +482,24 @@ const showGrain = SITE.backdropEffects.grain;
 
     // 1. Track listing / home routes for contextual `cd ..` back navigation
     const isDetailRoute =
-      /^(\/es)?\/posts\/(?!\d+\/?$)[^/]+/.test(pathname) ||
-      /^(\/es)?\/galleries\/[^/]+/.test(pathname);
+      /^(\/en)?\/posts\/(?!\d+\/?$)[^/]+/.test(pathname) ||
+      /^(\/en)?\/galleries\/[^/]+/.test(pathname);
     if (
       !isDetailRoute &&
       pathname !== "/404" &&
       pathname !== "/404.html" &&
       !pathname.startsWith("/search") &&
-      !pathname.startsWith("/es/search")
+      !pathname.startsWith("/en/search")
     ) {
       sessionStorage.setItem("backUrl", pathname + window.location.search);
     }
 
     // 2. Auto-save preference based on path (except root /)
     if (pathname !== "/") {
-      if (pathname.startsWith("/es/") || pathname === "/es") {
-        localStorage.setItem("preferred-lang", "es");
-      } else {
+      if (pathname.startsWith("/en/") || pathname === "/en") {
         localStorage.setItem("preferred-lang", "en");
+      } else {
+        localStorage.setItem("preferred-lang", "zh");
       }
     }
 

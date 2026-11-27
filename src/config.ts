@@ -1,12 +1,12 @@
 export const SITE = {
-  website: "https://devosfera.vercel.app/",
-  author: "Andrés Ujpán",
+  website: "https://wanfengdev.github.io/",
+  author: "at",
   profile:
     (typeof process !== "undefined" && process.env?.PUBLIC_SOCIAL_GITHUB) ||
     (import.meta.env?.PUBLIC_SOCIAL_GITHUB ?? ""), // set in .env
-  desc: "A space where curiosity becomes code. Exploring web development, software architecture and everything that makes the tech world spin.",
-  title: "Astro Devosfera",
-  ogImage: "devosfera-og.webp", // located in the public folder
+  desc: "晚风拂面，代码入心。记录 Web 开发、软件架构与技术世界的点滴思考。",
+  title: "晚风",
+  ogImage: "wanfeng-og.webp", // located in the public folder
   lightAndDarkMode: true,
   postPerIndex: 6,
   postPerPage: 12,
@@ -34,7 +34,7 @@ export const SITE = {
   },
   dynamicOgImage: true,
   dir: "ltr", // "rtl" | "auto"
-  lang: "en", // html lang code. Set this empty and default will be "en"
+  lang: "zh", // html lang code. Set this empty and default will be "en"
   timezone: "America/Guatemala", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   introAudio: {
     enabled: true, // show/hide intro player in home and compact player while navigating

@@ -1,0 +1,61 @@
+{
+  "repository": "https://github.com/aliyun/ai-agent-handbook",
+  "license": "Apache-2.0",
+  "parts": [
+    {
+      "id": "start",
+      "title": "开始阅读",
+      "english": "Start",
+      "description": "前言与开发者调研报告。"
+    },
+    {
+      "id": "architecture",
+      "title": "架构篇",
+      "english": "Architecture",
+      "range": "01—02",
+      "description": "建立共同语言，找到适合业务的 Agent 架构。"
+    },
+    {
+      "id": "build",
+      "title": "构建篇",
+      "english": "Build",
+      "range": "03—06",
+      "description": "以 Harness 为核心，组织任务、信息与行动。"
+    },
+    {
+      "id": "run",
+      "title": "运行篇",
+      "english": "Run",
+      "range": "07—12",
+      "description": "让任务跨越请求、进程和故障，持续可靠运行。"
+    },
+    {
+      "id": "governance",
+      "title": "治理篇",
+      "english": "Govern",
+      "range": "13—16",
+      "description": "让行为可见、权限有界、资产可管理、质量可验证。"
+    },
+    {
+      "id": "optimization",
+      "title": "调优篇",
+      "english": "Optimize",
+      "range": "17—24",
+      "description": "从运行事实出发，建立评估与持续改进的闭环。"
+    },
+    {
+      "id": "cases",
+      "title": "实践篇",
+      "english": "Practice",
+      "range": "25—29",
+      "description": "走进企业一线，在真实场景中理解工程取舍。"
+    },
+    {
+      "id": "outlook",
+      "title": "总结与展望",
+      "english": "Outlook",
+      "range": "30",
+      "description": "从 Agentic Application 走向 Agentic OS。"
+    }
+  ]
+}

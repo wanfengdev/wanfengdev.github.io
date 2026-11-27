@@ -5,7 +5,9 @@ import loadOgFont from "../loadOgFont";
 
 export default async function postOgImage(post: CollectionEntry<"blog">) {
   const siteHostname = new URL(SITE.website).hostname;
-  const writtenBy = post.id.startsWith("es/") ? "Escrito por " : "Written by ";
+  const isZh = post.id.startsWith("zh/");
+  const writtenBy = isZh ? "作者 " : "Written by ";
+  const textFont = isZh ? "Wanfeng CJK" : "Wotfard";
 
   return satori(
     {
@@ -84,6 +86,7 @@ export default async function postOgImage(post: CollectionEntry<"blog">) {
                   style: {
                     fontSize: 84,
                     fontWeight: 900,
+                    fontFamily: textFont,
                     lineHeight: 1.1,
                     margin: 0,
                     color: "#ffffff",
@@ -126,6 +129,7 @@ export default async function postOgImage(post: CollectionEntry<"blog">) {
                   props: {
                     style: {
                       fontSize: 32,
+                      fontFamily: textFont,
                       color: "#cbd5e1",
                     },
                     children: [

@@ -11,28 +11,40 @@ export interface OgFontOption {
   style: FontStyle;
 }
 
-let cachedFontBuffer: ArrayBuffer | null = null;
+function readFont(file: string): ArrayBuffer {
+  const fontPath = path.resolve(`./src/assets/fonts/${file}`);
+  const fontData = fs.readFileSync(fontPath);
+  return fontData.buffer.slice(
+    fontData.byteOffset,
+    fontData.byteOffset + fontData.byteLength
+  );
+}
+
+let cachedFonts: OgFontOption[] | null = null;
 
 export async function loadOgFont(): Promise<OgFontOption[]> {
-  if (!cachedFontBuffer) {
-    // Ensure it searches from the root of the project
-    const fontPath = path.resolve("./src/assets/fonts/wotfard.ttf");
-    const fontData = fs.readFileSync(fontPath);
-    cachedFontBuffer = fontData.buffer.slice(
-      fontData.byteOffset,
-      fontData.byteOffset + fontData.byteLength
-    );
+  if (!cachedFonts) {
+    const wotfard = readFont("wotfard.ttf");
+    // CJK subset (GB2312 level-1 + ASCII) for Chinese titles; see tools/subset-og-font.mjs
+    const cjkRegular = readFont("wanfeng-cjk-regular.ttf");
+    const cjkBlack = readFont("wanfeng-cjk-black.ttf");
+
+    // We map different weights to the same TTF file so that satori
+    // can render correctly regardless of the fontWeight
+    // used in the templates.
+    cachedFonts = [
+      { name: "Wotfard", data: wotfard, weight: 400, style: "normal" },
+      { name: "Wotfard", data: wotfard, weight: 600, style: "normal" },
+      { name: "Wotfard", data: wotfard, weight: 700, style: "normal" },
+      { name: "Wotfard", data: wotfard, weight: 900, style: "normal" },
+      { name: "Wanfeng CJK", data: cjkRegular, weight: 400, style: "normal" },
+      { name: "Wanfeng CJK", data: cjkRegular, weight: 600, style: "normal" },
+      { name: "Wanfeng CJK", data: cjkBlack, weight: 700, style: "normal" },
+      { name: "Wanfeng CJK", data: cjkBlack, weight: 900, style: "normal" },
+    ];
   }
 
-  // We map different weights to the same TTF file so that satori
-  // can render correctly regardless of the fontWeight
-  // used in the templates.
-  return [
-    { name: "Wotfard", data: cachedFontBuffer, weight: 400, style: "normal" },
-    { name: "Wotfard", data: cachedFontBuffer, weight: 600, style: "normal" },
-    { name: "Wotfard", data: cachedFontBuffer, weight: 700, style: "normal" },
-    { name: "Wotfard", data: cachedFontBuffer, weight: 900, style: "normal" },
-  ];
+  return cachedFonts;
 }
 
 export default loadOgFont;

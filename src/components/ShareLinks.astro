@@ -13,7 +13,7 @@ interface Props {
 }
 
 const { isSidebar = false } = Astro.props;
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
 const URL = Astro.url;
 ---

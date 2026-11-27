@@ -17,12 +17,12 @@ if (!SITE.showArchives) {
 }
 
 import { useTranslations } from "@/i18n/utils";
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const prefix = locale === "es" ? "/es" : "";
+const prefix = locale === "en" ? "/en" : "";
 
 const isMatchingLocale = (id: string) =>
-  id.startsWith(`${locale}/`) || (locale === "en" && !id.startsWith("es/"));
+  id.startsWith(`${locale}/`) || (locale === "zh" && !id.startsWith("en/"));
 
 const [blogPosts, galleryPosts] = await Promise.all([
   getCollection("blog", ({ id }) => isMatchingLocale(id)),
@@ -46,21 +46,21 @@ const monthsEN = [
   "November",
   "December",
 ];
-const monthsES = [
-  "Enero",
-  "Febrero",
-  "Marzo",
-  "Abril",
-  "Mayo",
-  "Junio",
-  "Julio",
-  "Agosto",
-  "Septiembre",
-  "Octubre",
-  "Noviembre",
-  "Diciembre",
+const monthsZH = [
+  "一月",
+  "二月",
+  "三月",
+  "四月",
+  "五月",
+  "六月",
+  "七月",
+  "八月",
+  "九月",
+  "十月",
+  "十一月",
+  "十二月",
 ];
-const months = locale === "es" ? monthsES : monthsEN;
+const months = locale === "en" ? monthsEN : monthsZH;
 
 const totalPosts = posts.length;
 

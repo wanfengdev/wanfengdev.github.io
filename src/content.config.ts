@@ -5,6 +5,7 @@ import { SITE } from "@/config";
 
 export const BLOG_PATH = "src/data/blog";
 export const GALLERY_PATH = "src/data/galleries";
+export const HANDBOOK_PATH = "src/data/handbook";
 
 const blog = defineCollection({
   loader: glob({ pattern: "**/[^_]*.{md,mdx}", base: `./${BLOG_PATH}` }),
@@ -36,4 +37,19 @@ const galleries = defineCollection({
     }),
 });
 
-export const collections = { blog, galleries };
+// zh-only column imported from the open-source《AI Agent Handbook》(Apache-2.0)
+const handbook = defineCollection({
+  loader: glob({ pattern: "zh/**/*.md", base: `./${HANDBOOK_PATH}` }),
+  schema: () =>
+    z.object({
+      title: z.string(),
+      description: z.string().default(""),
+      partId: z.string(),
+      part: z.string(),
+      chapter: z.union([z.string(), z.number()]).optional(),
+      order: z.number(),
+      source: z.string(),
+    }),
+});
+
+export const collections = { blog, galleries, handbook };

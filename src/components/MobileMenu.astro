@@ -17,17 +17,16 @@ interface Props {
 
 const { currentPath } = Astro.props;
 
-const locale = Astro.currentLocale || "en";
+const locale = Astro.currentLocale || "zh";
 const t = useTranslations(locale);
-const targetLocale = locale === "es" ? "en" : "es";
+const targetLocale = locale === "en" ? "zh" : "en";
 const targetLanguageUrl = getTargetLanguageUrl(
   Astro.url.pathname,
   targetLocale
 );
-const langToggleTitle =
-  locale === "es" ? "Switch to English" : "Cambiar a Español";
-const langToggleLabel =
-  locale === "es" ? "Switch to English" : "Cambiar a Español";
+const langToggleTitle = locale === "en" ? "切换到中文" : "Switch to English";
+const langChipLabel = targetLocale === "en" ? "EN" : "中文";
+const prefix = locale === "en" ? "/en" : "";
 
 const isActive = (path: string) => checkRouteActive(currentPath, path);
 ---
@@ -43,13 +42,11 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
         <!-- Primary navigation links -->
         <nav
           class="mobile-nav-links"
-          aria-label={
-            locale === "es" ? "Navegación principal" : "Main navigation"
-          }
+          aria-label={locale === "en" ? "Main navigation" : "主导航"}
         >
           <!-- Posts -->
           <a
-            href={locale === "es" ? "/es/posts" : "/posts"}
+            href={`${prefix}/posts`}
             class:list={["mobile-nav-link", { active: isActive("/posts") }]}
             style="--i:0"
           >
@@ -75,11 +72,39 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
             )}
           </a>
 
+          <!-- Handbook column -->
+          <a
+            href={`${prefix}/handbook`}
+            class:list={["mobile-nav-link", { active: isActive("/handbook") }]}
+            style="--i:1"
+          >
+            <span class="mobile-nav-icon" aria-hidden="true">
+              <!-- Book icon -->
+              <svg
+                class="size-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="1.8"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+                ></path>
+              </svg>
+            </span>
+            <span>{t("nav.handbook")}</span>
+            {isActive("/handbook") && (
+              <span class="mobile-nav-active-dot" aria-hidden="true" />
+            )}
+          </a>
+
           <!-- About -->
           <a
-            href={locale === "es" ? "/es/about" : "/about"}
+            href={`${prefix}/about`}
             class:list={["mobile-nav-link", { active: isActive("/about") }]}
-            style="--i:1"
+            style="--i:2"
           >
             <span class="mobile-nav-icon" aria-hidden="true">
               <!-- User icon -->
@@ -105,9 +130,9 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
 
           <!-- Tags -->
           <a
-            href={locale === "es" ? "/es/tags" : "/tags"}
+            href={`${prefix}/tags`}
             class:list={["mobile-nav-link", { active: isActive("/tags") }]}
-            style="--i:2"
+            style="--i:3"
           >
             <span class="mobile-nav-icon" aria-hidden="true">
               <!-- Tag icon -->
@@ -133,12 +158,12 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
 
           {SITE.showArchives && (
             <a
-              href={locale === "es" ? "/es/archives" : "/archives"}
+              href={`${prefix}/archives`}
               class:list={[
                 "mobile-nav-link",
                 { active: isActive("/archives") },
               ]}
-              style="--i:3"
+              style="--i:4"
             >
               <span class="mobile-nav-icon" aria-hidden="true">
                 <IconArchive class="size-4" />
@@ -151,12 +176,12 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
           )}
           {SITE.showGalleries && (
             <a
-              href={locale === "es" ? "/es/galleries" : "/galleries"}
+              href={`${prefix}/galleries`}
               class:list={[
                 "mobile-nav-link",
                 { active: isActive("/galleries") },
               ]}
-              style="--i:4"
+              style="--i:5"
             >
               <span class="mobile-nav-icon" aria-hidden="true">
                 <IconGallery class="size-4" />
@@ -173,16 +198,14 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
         <div class="mobile-menu-divider"></div>
 
         <!-- Utilities section label -->
-        <p class="mobile-section-label">
-          {locale === "es" ? "Herramientas" : "Tools"}
-        </p>
+        <p class="mobile-section-label">{locale === "en" ? "Tools" : "工具"}</p>
 
         <!-- Action row: Search -->
         <div class="mobile-menu-actions">
           <button
             data-search-trigger
             class="mobile-action-btn"
-            title={locale === "es" ? "Buscar (⌘K)" : "Search (⌘K)"}
+            title={locale === "en" ? "Search (⌘K)" : "搜索 (⌘K)"}
             aria-label={t("nav.openSearch")}
           >
             <IconSearch class="size-4 shrink-0" />
@@ -196,17 +219,36 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
 
         <!-- Preferences section label -->
         <p class="mobile-section-label">
-          {locale === "es" ? "Preferencias" : "Preferences"}
+          {locale === "en" ? "Preferences" : "偏好"}
         </p>
 
-        <!-- Preferences row: Lang + Theme -->
+        <!-- Preferences row: Theme + Lang (language switcher last) -->
         <div class="mobile-prefs-row">
+          {SITE.lightAndDarkMode && (
+            <button
+              id="theme-btn-mobile"
+              class="mobile-pref-btn flex-1"
+              title={t("nav.theme")}
+              aria-label="auto"
+              aria-live="polite"
+            >
+              <IconMoon class="block size-4 shrink-0 dark:hidden" />
+              <IconSunHigh class="hidden size-4 shrink-0 dark:block" />
+              <span class="block dark:hidden">
+                {locale === "en" ? "Dark" : "深色"}
+              </span>
+              <span class="hidden dark:block">
+                {locale === "en" ? "Light" : "浅色"}
+              </span>
+            </button>
+          )}
+
           <!-- Language toggle -->
           <a
             href={targetLanguageUrl}
             class="mobile-pref-btn flex-1"
             title={langToggleTitle}
-            aria-label={langToggleLabel}
+            aria-label={langToggleTitle}
             data-lang-toggle={targetLocale}
           >
             <svg
@@ -224,28 +266,9 @@ const isActive = (path: string) => checkRouteActive(currentPath, path);
               ></path>
             </svg>
             <span class="font-firacode text-xs font-bold tracking-wider">
-              {locale === "es" ? "EN" : "ES"}
+              {langChipLabel}
             </span>
           </a>
-
-          {SITE.lightAndDarkMode && (
-            <button
-              id="theme-btn-mobile"
-              class="mobile-pref-btn flex-1"
-              title={t("nav.theme")}
-              aria-label="auto"
-              aria-live="polite"
-            >
-              <IconMoon class="block size-4 shrink-0 dark:hidden" />
-              <IconSunHigh class="hidden size-4 shrink-0 dark:block" />
-              <span class="block dark:hidden">
-                {locale === "es" ? "Oscuro" : "Dark"}
-              </span>
-              <span class="hidden dark:block">
-                {locale === "es" ? "Claro" : "Light"}
-              </span>
-            </button>
-          )}
         </div>
       </div>
     </div>
